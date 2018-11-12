@@ -1,0 +1,100 @@
+/*  Luis Ernesto Del Bosque Avalos 
+*   s4758870
+*   Improvements implemented: 
+*      .... 
+            Color pallete, 
+            paddle class, 
+            score class, 
+            start menu, 
+            Winner serves: TopPaddle uses mouse to aim and presses W to fire. Bottom Paddle uses UP
+            added colors, 
+            mechanic: Puck speed increases on each paddle hit, 
+            more robust Physics() --> PuckX and PuckY updated on collision
+    Improvements pendent:
+      - More time for player to serve
+*/
+
+import controlP5.*;
+
+Puck myPuck;
+Paddle pad1, pad2;
+Score score; 
+ControlP5 cp5;
+
+final boolean[] KEYS =  new boolean[255];
+final float PADDLE_SPEED = 20;
+final int PL = 125, PW = 5;
+boolean gameHasStarted = false; 
+
+void setup(){
+  size(600,1000);
+  initialize();
+}
+
+void initialize(){
+  pad1 = new Paddle(true, 6*PW, width/2, PL, PW);
+  pad2 = new Paddle(false, height - 8*PW, width/2, PL, PW);
+  myPuck = new Puck();
+  score = new Score(0,0,10,2);
+  cp5 = new ControlP5(this);
+  cp5.addButton("startButton")
+     .setLabel("Start!")
+     .setPosition((width/2)-200,height/2)
+     .setSize(400,40)
+     ;
+}
+
+void draw(){
+  background(249,237,204);
+  if (gameHasStarted){
+    handleInput();
+    mechanics();
+    drawUnits();
+  }
+}
+
+void drawUnits(){
+  myPuck.display();
+  pad1.display();
+  pad2.display();
+  score.display();
+}
+
+void mechanics(){
+  myPuck.move();
+  myPuck.bounce(pad1, pad2, PL, PW);
+  score.keep(myPuck.hasPuckHitGoal());
+  
+  if (myPuck.hasPuckHitGoal() != 0){
+    background(237,174,73);
+    reset();
+  }
+    
+}
+
+void handleInput(){
+  if (KEYS[65])
+    pad1.x -= PADDLE_SPEED;
+  if (KEYS[68])
+    pad1.x += PADDLE_SPEED;
+  if (KEYS[LEFT])
+    pad2.x -= PADDLE_SPEED;
+  if (KEYS[RIGHT])
+    pad2.x += PADDLE_SPEED;
+
+}
+
+void keyPressed(){
+  KEYS[keyCode] = true;
+}
+
+void keyReleased(){
+  KEYS[keyCode] = false; 
+}
+
+public void startButton() {
+  println("The button has been clicked!");
+  gameHasStarted = true;
+  cp5.getController("startButton").remove();   // removes the button
+}
+
