@@ -1,0 +1,82 @@
+class Puck{
+  
+  float puckX, puckY;
+  float xSpeed, ySpeed;
+  
+  final float PD = 30;
+  final float R = PD/2;
+  
+  Puck (){
+    puckX = width/2; 
+    puckY = height/2;
+    xSpeed = 4;
+    ySpeed = 4; 
+  }
+  
+  void move(){
+    puckX += xSpeed; 
+    puckY += ySpeed;
+  }
+  
+  void bounce(Paddle p1, Paddle p2, int PL, int PW){
+    if(puckX+R > width || puckX-R < 0)
+      xSpeed *= -1;
+    
+    if (p1.isTopPaddle){
+      if ((puckY-R <= p1.y + PW) && (puckX >= p1.x) && (puckX <= (p1.x + PL))){
+        puckY = p1.y + R;
+        ySpeed *= -1.1;
+      } 
+    }
+    else
+      if ((puckY+R >= p1.bounceLimit) && (puckX >= p1.x) && (puckX <= (p1.x + PL)))
+        ySpeed *= -1.1;
+    
+    if (p2.isTopPaddle){
+      if ((puckY+R <= p2.bounceLimit) && (puckX >= p2.x) && (puckX <= (p2.x + PL)))
+        ySpeed *= -1.1; 
+    }
+    else
+      if ((puckY+R >= p2.y) && (puckX >= p2.x) && (puckX <= (p2.x + PL))){
+        puckY = p2.y - R;
+        ySpeed *= -1.1;
+      }
+  }
+  
+  void display(){
+    fill(255,0,0);
+    stroke(255,0,0);
+    ellipse(puckX, puckY, PD, PD);
+  }
+  
+  int hasPuckHitGoal(){
+    if (puckY-R <= 0){
+      myPuck.bottomReset();
+      return 1;
+    }
+    if (puckY+R >= height){
+      myPuck.topReset();
+      return -1;
+    }
+    return 0;
+  }
+  
+  void topReset(){
+       
+      puckX = mouseX;
+      puckY = height/2 - height/3;
+      
+      xSpeed = random(2,10); 
+      ySpeed = random(2,10);
+  }
+    
+    void bottomReset(){
+     
+      puckX = mouseX;
+      puckY = height/2 + height/3;
+      
+      xSpeed = random(-10, -2);
+      ySpeed = random(-10,-2);
+  }
+    
+}
