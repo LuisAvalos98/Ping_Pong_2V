@@ -1,0 +1,38 @@
+class Score{
+  
+  int top_score, bottom_score, max, bonus_step;
+  boolean topScored, bottomScored; 
+  
+  public Score(int x, int y, int w, int z){
+    top_score = x;
+    bottom_score = y; 
+    max = w; 
+    bonus_step = z; 
+  }
+  
+  void keep(int a){
+    if (a == 1){
+      bottom_score++; 
+      bottomScored = true;
+    }
+    else if (a == -1){
+      top_score++;
+      topScored = true;
+    }
+  }
+  
+  void display(){
+    PFont f; 
+    
+    f = createFont("Arial",16, true);
+    
+    textFont(f, 32);
+    fill(237,174,73);
+    text(top_score, 10, 80);
+    
+    textFont(f,32); 
+    fill(237,174,73);
+    text(bottom_score, 10, height-60);
+  }
+  
+}
