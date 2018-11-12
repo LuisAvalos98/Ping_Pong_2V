@@ -1,0 +1,29 @@
+class Paddle{
+   
+   float x,y;
+   int paddleLength, paddleWidth;
+   float bounceLimit; 
+   boolean isTopPaddle; 
+    
+   Paddle (boolean m, float y, float x, int pL, int pW){
+     this.y = y; 
+     this.x = x;
+     paddleLength = pL; 
+     paddleWidth = pW;
+     
+     isTopPaddle = m;
+       
+     if (isTopPaddle)
+       bounceLimit = y + 2*paddleWidth;
+     else
+       bounceLimit = y; 
+   }
+   
+   void display(){
+      x = constrain(x, 1,width-paddleLength);
+      fill(97,33,15);
+      stroke(97,33,15);
+      rect(x, y, paddleLength, paddleWidth);
+   }
+
+}
